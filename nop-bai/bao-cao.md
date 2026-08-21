@@ -13,8 +13,8 @@ HƯỚNG DẪN - đọc rồi XÓA TOÀN BỘ các khối chú thích này sau k
 
 | | |
 |---|---|
-| Họ và tên | ___ |
-| MSSV | ___ |
+| Họ và tên | Lê Thị Trúc Linh |
+| MSSV | 2A202601322 |
 | Lớp / Khóa | K4 |
 | Repo GitHub | https://github.com/___/___ |
 | Ngày nộp | ___ |
@@ -27,13 +27,14 @@ HƯỚNG DẪN - đọc rồi XÓA TOÀN BỘ các khối chú thích này sau k
 
 | Lần chạy | n_estimators | learning_rate | max_depth | f1_score | accuracy |
 |---|---|---|---|---|---|
-| 1 | ___ | ___ | ___ | ___ | ___ |
-| 2 | ___ | ___ | ___ | ___ | ___ |
-| 3 | ___ | ___ | ___ | ___ | ___ |
+| 1 | 100 | 0.1 | 3 | 0.7109 | 0.878 |
+| 2 | 50 | 0.05 | 2 | 0.6051 | 0.846 |
+| 3 | 200 | 0.1 | 5 | 0.7149 | 0.874 |
+| 4 | 200 | 0.2 | 3 | 0.7032 | 0.870 |
 
-**Bộ siêu tham số đã chọn:** `n_estimators=___`, `learning_rate=___`, `max_depth=___`.
+**Bộ siêu tham số đã chọn:** `n_estimators=200`, `learning_rate=0.1`, `max_depth=5`.
 
-**Lý do:** ___
+**Lý do:** Lần chạy 3 đạt f1_score cao nhất (0.7149), vượt ngưỡng chất lượng 0.65 của lab. Đáng chú ý, lần chạy có accuracy cao nhất lại là lần 1 (0.878), không trùng với lần có f1_score cao nhất — cho thấy accuracy có thể đánh lừa khi chọn mô hình cho dữ liệu mất cân bằng, vì nó bị chi phối bởi lớp đa số (thu nhập thấp). Về đánh đổi n_estimators/learning_rate: lần 2 dùng cả hai giá trị thấp (n_estimators=50, learning_rate=0.05) khiến mô hình chưa học đủ, f1_score giảm mạnh xuống 0.6051. Khi tăng độ sâu cây (max_depth=5) thay vì tăng learning_rate (lần 4, learning_rate=0.2), mô hình học tốt hơn trên lớp thiểu số, cho thấy độ sâu cây quan trọng hơn tốc độ học trong bài toán này.
 
 <!--
 Trả lời trong phần Lý do:
@@ -49,7 +50,7 @@ Trả lời trong phần Lý do:
 
 <!-- Khoảng 120 - 150 từ. -->
 
-___
+Tập dữ liệu Adult Income có phân bố lớp mất cân bằng: chỉ 24,8% mẫu thuộc lớp thu nhập cao (>50K), 75,2% còn lại thuộc lớp thu nhập thấp. Với tỷ lệ này, một mô hình vô dụng luôn trả lời "thu nhập thấp" cho mọi đầu vào vẫn đạt accuracy 0,752 — con số trông rất cao nhưng gây hiểu nhầm nghiêm trọng, vì mô hình đó không bắt được một trường hợp thu nhập cao nào (f1_score = 0). Ngược lại, f1_score của lớp dương là trung bình điều hòa giữa precision và recall trên đúng lớp thiểu số cần dự đoán, nên phản ánh chính xác khả năng mô hình nhận diện nhóm thu nhập cao — điều accuracy không đo được. Vì lý do này, lab không dùng `average="weighted"` hay `average="macro"` khi gọi `f1_score`, bởi hai cách tính đó gộp cả lớp đa số vào công thức trung bình, kéo điểm số lên cao giả tạo và làm mất hoàn toàn ý nghĩa của ngưỡng chất lượng.
 
 <!--
 Cần nêu được:
